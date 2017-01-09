@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject projectile;
     public float projectileSpeed;
     public float firingRate = 0.2f;
+    public float health = 250;
 
     private float xmin = -5.0f;
     private float xmax = 5.0f;
@@ -23,11 +24,11 @@ public class PlayerController : MonoBehaviour {
 
     void Fire()
     {
-        GameObject beam = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
+        Vector3 offset = new Vector3(0, 1, 0);
+        GameObject beam = Instantiate(projectile, transform.position + offset, Quaternion.identity) as GameObject;
         beam.rigidbody2D.velocity = new Vector3(0, projectileSpeed, 0);
     }
  	
-	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -48,4 +49,20 @@ public class PlayerController : MonoBehaviour {
         float newX = Mathf.Clamp(transform.position.x, xmin, xmax);
         transform.position = new Vector3(newX, transform.position.y, 0);
 	}
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        Projectile missile = collider.gameObject.GetComponent<Projectile>();
+
+        if (missile)
+        {
+            Debug.Log("Player hit with enemy missile");
+            health -= missile.GetDamage();
+            missile.Hit();
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
 }
