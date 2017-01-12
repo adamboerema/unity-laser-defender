@@ -10,7 +10,6 @@ public class EnemyBehavior : MonoBehaviour {
     public int scoreValue = 150;
     public AudioClip fireSound;
     public AudioClip deathSound;
-
     private ScoreKeeper scoreKeeper;
 
     void Start()
